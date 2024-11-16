@@ -19,10 +19,6 @@ export default async function StorePage({ params }: PageProps) {
 
   const shopMetadata = await getShopMetadata(npub);
 
-  if (!shopMetadata) {
-    return <h1>This profile does have a shop</h1>;
-  }
-
   const products: string[] = [];
   const shopProducts = await getProductsFromShop(npub);
   shopProducts.forEach((event) => {
@@ -32,9 +28,9 @@ export default async function StorePage({ params }: PageProps) {
   return (
     <>
       <Header
-        name={shopMetadata.name || profile.getDisplayName()}
-        description={shopMetadata.about || profile.getAbout()}
-        icon={shopMetadata.ui.picture || profile.getPicture()}
+        name={shopMetadata?.name || profile.getName()}
+        description={shopMetadata?.about || profile.getAbout()}
+        icon={shopMetadata?.ui.picture || profile.getPicture()}
       />
 
       <section className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-y-6 pb-20">
