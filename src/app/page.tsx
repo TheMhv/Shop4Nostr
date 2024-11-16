@@ -1,21 +1,18 @@
-import { Footer } from "@/components/Footer";
-import { Header } from "@/components/home/Header";
-import { ProductCard } from "@/components/home/productCard";
-import { randomUUID } from "crypto";
+import Link from "next/link";
 
 export default function Home() {
   return (
-    <>
-      <Header />
+    <div className="flex items-center justify-center h-screen">
+      <div className="flex items-center justify-center text-center text-sm space-x-2 mx-auto">
+        <span>Built your shop with </span>
 
-      <section className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-y-6 pb-20">
-        <ProductCard id={randomUUID()} title="Sample Product" price={21} />
-        <ProductCard id={randomUUID()} title="Sample Product" price={21} />
-        <ProductCard id={randomUUID()} title="Sample Product" price={21} />
-        <ProductCard id={randomUUID()} title="Sample Product" price={21} />
-      </section>
-
-      <Footer />
-    </>
+        <Link
+          href="https://github.com/TheMhv/Shop4Nostr"
+          className="flex items-center justify-center text-purple-500 font-semibold hover:underline hover:text-base transition-all"
+        >
+          Shop4Nostr
+        </Link>
+      </div>
+    </div>
   );
 }
