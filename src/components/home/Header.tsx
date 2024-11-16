@@ -1,22 +1,21 @@
 import React from "react";
 import { ImageOff, Search } from "lucide-react";
 import Image from "next/image";
-import { ShopMetadata } from "@/lib/nostr/market";
 
 interface HeaderProps {
-  shopMetadata: ShopMetadata;
+  name?: string;
+  description?: string;
+  icon?: string;
 }
 
-const Header = ({ shopMetadata }: HeaderProps) => {
-  const storeIcon = shopMetadata.ui.picture;
-
+const Header = ({ name = "", description = "", icon = "" }: HeaderProps) => {
   return (
     <header className="mt-24 px-4 md:px-8">
       <div className="text-center mx-auto space-y-4">
         <div className="flex items-center justify-center relative aspect-[3/4] rounded-full w-24 h-24 mx-auto bg-gray-800">
-          {storeIcon ? (
+          {icon ? (
             <Image
-              src={storeIcon}
+              src={icon}
               fill
               alt="Store icon"
               className="object-cover rounded-full w-1/3 h-1/3"
@@ -30,12 +29,8 @@ const Header = ({ shopMetadata }: HeaderProps) => {
         </div>
 
         <div className="space-y-2">
-          <span className="text-2xl font-bold">
-            {shopMetadata.name || "Sample Store"}
-          </span>
-          <p className="text-white/80 text-sm">
-            {shopMetadata.about || "Welcome to our online store!"}
-          </p>
+          <span className="text-2xl font-bold">{name}</span>
+          <p className="text-white/80 text-sm">{description}</p>
         </div>
       </div>
 

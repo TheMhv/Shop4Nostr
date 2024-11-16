@@ -9,7 +9,7 @@ interface PageProps {
 }
 
 export default async function StorePage({ params }: PageProps) {
-  const { npub } = params;
+  const { npub } = await params;
 
   const profile = await getUser(npub);
 
@@ -26,12 +26,17 @@ export default async function StorePage({ params }: PageProps) {
   const products: string[] = [];
   const shopProducts = await getProductsFromShop(npub);
   shopProducts.forEach((event) => {
+    console.log(event.asPrettyJson());
     products.push(event.asJson());
   });
 
   return (
     <>
-      <Header shopMetadata={shopMetadata} />
+      <Header
+        name={shopMetadata.name || profile.getDisplayName()}
+        description={shopMetadata.about || profile.getAbout()}
+        icon={shopMetadata.ui.picture || profile.getPicture()}
+      />
 
       <section className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-y-6 pb-20">
         {products.map((product, index) => (
