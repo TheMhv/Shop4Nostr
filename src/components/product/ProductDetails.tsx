@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useCart } from "@/components/cart/CartContext";
 import { Product } from "@/types/product";
-import { Store, Zap } from "lucide-react";
+import { Banknote, Store, Zap } from "lucide-react";
 import { QuantitySelector } from "./QuantitySelector";
 import Link from "next/link";
 import Image from "next/image";
@@ -68,8 +68,14 @@ export function ProductDetails({ product }: ProductDetailsProps) {
           </div>
 
           <div className="flex items-center gap-2 text-3xl font-bold">
-            <Zap className="text-yellow-500" aria-hidden="true" />
-            <span>{product.price.toLocaleString()} Sats</span>
+            {product.currency == "sats" ? (
+              <Zap className="text-yellow-500" aria-hidden="true" />
+            ) : (
+              <Banknote className="text-green-700" aria-hidden="true" />
+            )}
+            <span>
+              {product.price.toLocaleString()} {product.currency}
+            </span>
           </div>
         </div>
       </div>

@@ -1,30 +1,18 @@
 import { ChevronRight } from "lucide-react";
 import { ProductCard } from "../home/productCard";
 import Link from "next/link";
+import { getProductsFromShop } from "@/lib/nostr/market";
 
-interface OtherProductsProps {
-  category: string;
-  currentProductId: string;
-}
+export async function OtherProducts({ npub, currentProductId }) {
+  const products: string[] = [];
 
-async function getOtherProducts(category: string, currentProductId: string) {
-  console.log(currentProductId);
+  const shopProducts = await getProductsFromShop(npub);
 
-  return Array.from({ length: 4 }, (_, i) => ({
-    id: crypto.randomUUID(),
-    title: `Sample Product ${i + 1}`,
-    price: Math.floor(Math.random() * 100) + 10,
-    images: [],
-    slug: `sample-product-${i + 1}`,
-    category,
-  }));
-}
-
-export async function OtherProducts({
-  category,
-  currentProductId,
-}: OtherProductsProps) {
-  const products = await getOtherProducts(category, currentProductId);
+  shopProducts.forEach((event) => {
+    if (event.id.toHex() != currentProductId) {
+      products.push(event.asJson());
+    }
+  });
 
   if (products.length === 0) {
     return null;
@@ -48,8 +36,8 @@ export async function OtherProducts({
         className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 pb-20"
         aria-label="Other products"
       >
-        {products.map((product) => (
-          <ProductCard key={product.id} {...product} />
+        {products.map((product, index) => (
+          <ProductCard key={index} product={product} />
         ))}
       </section>
     </div>

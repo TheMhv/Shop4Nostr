@@ -1,6 +1,7 @@
 import {
   Duration,
   EventBuilder,
+  EventId,
   Filter,
   Kind,
   PublicKey,
@@ -75,4 +76,16 @@ export async function getProductsFromShop(npub: string) {
   const events = await client.fetchEvents([filter], Duration.fromSecs(10));
 
   return events;
+}
+
+export async function getProductByEventId(eventId: string) {
+  const client = await clientConnect();
+
+  const filter = new Filter()
+    .id(EventId.parse(eventId))
+    .kind(new Kind(30402))
+    .until(Timestamp.now());
+
+  const events = await client.fetchEvents([filter], Duration.fromSecs(10));
+  return events.first();
 }

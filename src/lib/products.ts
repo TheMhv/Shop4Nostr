@@ -1,4 +1,4 @@
-import { Product } from "@/types/product";
+import { getProductByEventId } from "./nostr/market";
 
 export class ProductNotFoundError extends Error {
   constructor(id: string) {
@@ -7,18 +7,23 @@ export class ProductNotFoundError extends Error {
   }
 }
 
-export async function getProduct(id: string): Promise<Product> {
+export async function getProduct(id: string) {
   try {
-    // In a real app, this would be an API call
+    const productEvent = await getProductByEventId(id);
+
     const product = {
-      id,
-      title: "Sample Product",
-      description: "Lorem ipsum dolor sit amet...",
-      price: 21,
-      inStock: true,
-      images: [],
+      id: productEvent?.id.toHex() || "",
+      title: productEvent?.tags.find("title")?.content() || "Sample Product",
+      description:
+        productEvent?.tags.find("summary")?.content() || "Sample Summary",
+      price: parseInt(productEvent?.tags.find("price")?.content() || "21"),
+      currency: productEvent?.tags.find("price")?.asVec().at(2) || "sats",
+      inStock:
+        productEvent?.tags.find("status")?.content() == "active" || false,
+      images: [productEvent?.tags.find("image")?.content() || ""],
       slug: "sample-product",
       category: "general",
+      npub: productEvent?.author.toBech32() || "",
     };
 
     if (!product) throw new ProductNotFoundError(id);

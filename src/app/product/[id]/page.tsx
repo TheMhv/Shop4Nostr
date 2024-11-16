@@ -53,10 +53,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
         </div>
 
         <Suspense fallback={<OtherProductsSkeleton />}>
-          <OtherProducts
-            category={product.category}
-            currentProductId={product.id}
-          />
+          <OtherProducts npub={product.npub} currentProductId={product.id} />
         </Suspense>
       </main>
 
