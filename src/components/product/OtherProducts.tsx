@@ -24,7 +24,7 @@ export async function OtherProducts({ npub, currentProductId }) {
         <h2 className="font-semibold text-xl">See also</h2>
 
         <Link
-          href="/"
+          href={`/shop/${npub}`}
           className="flex items-center gap-2 font-semibold hover:scale-105 transition-all group"
         >
           <span>See all</span>
