@@ -26,7 +26,6 @@ export default async function StorePage({ params }: PageProps) {
   const products: string[] = [];
   const shopProducts = await getProductsFromShop(npub);
   shopProducts.forEach((event) => {
-    console.log(event.asPrettyJson());
     products.push(event.asJson());
   });
 
