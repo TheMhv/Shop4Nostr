@@ -10,10 +10,23 @@ import Image from "next/image";
 
 interface ProductDetailsProps {
   product: Product;
+  store: {
+    name?: string;
+    icon?: string;
+    npub: string;
+  };
 }
 
-const StoreHeader = ({ icon, name }: { icon?: string; name: string }) => (
-  <Link href="/" className="group">
+const StoreHeader = ({
+  icon,
+  name,
+  npub,
+}: {
+  icon?: string;
+  name: string;
+  npub: string;
+}) => (
+  <Link href={`/shop/${npub}`} className="group">
     <div className="flex gap-x-3 items-center">
       <div className="flex items-center shrink-0 relative size-8">
         {icon ? (
@@ -34,7 +47,7 @@ const StoreHeader = ({ icon, name }: { icon?: string; name: string }) => (
   </Link>
 );
 
-export function ProductDetails({ product }: ProductDetailsProps) {
+export function ProductDetails({ product, store }: ProductDetailsProps) {
   const [quantity, setQuantity] = useState(1);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const { addItem } = useCart();
@@ -60,7 +73,9 @@ export function ProductDetails({ product }: ProductDetailsProps) {
   return (
     <div className="space-y-14">
       <div className="space-y-6">
-        <StoreHeader name="My Store" />
+        {store.name && (
+          <StoreHeader name={store.name} icon={store.icon} npub={store.npub} />
+        )}
 
         <div className="space-y-6">
           <div className="flex items-start justify-between">
@@ -68,13 +83,13 @@ export function ProductDetails({ product }: ProductDetailsProps) {
           </div>
 
           <div className="flex items-center gap-2 text-3xl font-bold">
-            {product.currency == "sats" ? (
+            {product.currency.toLowerCase() == "sats" ? (
               <Zap className="text-yellow-500" aria-hidden="true" />
             ) : (
               <Banknote className="text-green-700" aria-hidden="true" />
             )}
             <span>
-              {product.price.toLocaleString()} {product.currency}
+              {product.price.toLocaleString()} {product.currency.toLowerCase()}
             </span>
           </div>
         </div>

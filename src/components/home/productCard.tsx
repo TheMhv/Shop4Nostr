@@ -52,14 +52,14 @@ const ProductCard = ({ product, soldOut = false, preSale = false }) => {
             {title}
           </h2>
           <div className="flex items-center gap-2 text-lg leading-[130%] font-semibold">
-            {currency == "sats" ? (
+            {currency?.toLowerCase() == "sats" ? (
               <Zap className="text-yellow-500" aria-hidden="true" />
             ) : (
               <Banknote className="text-green-700" aria-hidden="true" />
             )}
 
             <span>
-              {price.toLocaleString()} {currency}
+              {price.toLocaleString()} {currency?.toLowerCase()}
             </span>
           </div>
         </div>

@@ -7,7 +7,7 @@ export interface Product {
   images: string[];
   inStock: boolean;
   slug: string;
-  category: string;
+  tags: string[];
 }
 
 export interface CartItem extends Pick<Product, "id" | "title" | "price"> {

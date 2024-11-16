@@ -4,6 +4,8 @@ import { OtherProductsSkeleton } from "@/components/product/OtherProductsSkeleto
 import { ProductDetails } from "@/components/product/ProductDetails";
 import { ProductDetailsSkeleton } from "@/components/product/ProductDetailsSkeleton";
 import { ProductGallery } from "@/components/product/ProductGallery";
+import { getShopMetadata } from "@/lib/nostr/market";
+import { getUser } from "@/lib/nostr/users";
 import { getProduct } from "@/lib/products";
 import { Undo } from "lucide-react";
 import { Metadata } from "next";
@@ -17,7 +19,8 @@ interface ProductPageProps {
 export async function generateMetadata({
   params,
 }: ProductPageProps): Promise<Metadata> {
-  const product = await getProduct(params.id);
+  const { id } = await params;
+  const product = await getProduct(id);
 
   return {
     title: `${product.title} | Shop4Nostr`,
@@ -31,7 +34,17 @@ export async function generateMetadata({
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
-  const product = await getProduct(params.id);
+  const { id } = await params;
+  const product = await getProduct(id);
+
+  const profile = await getUser(product.npub);
+  const shopMetadata = await getShopMetadata(product.npub);
+
+  const store = {
+    name: shopMetadata?.name || profile.getName(),
+    icon: shopMetadata?.ui.picture || profile.getPicture(),
+    npub: product.npub,
+  };
 
   return (
     <>
@@ -48,7 +61,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
           <ProductGallery images={product.images} title={product.title} />
 
           <Suspense fallback={<ProductDetailsSkeleton />}>
-            <ProductDetails product={product} />
+            <ProductDetails product={product} store={store} />
           </Suspense>
         </div>
 
