@@ -1,6 +1,4 @@
-import { Footer } from "@/components/Footer";
-import { Header } from "@/components/home/Header";
-import { ProductCard } from "@/components/home/productCard";
+import { ShopInfo } from "@/components/home/ShopInfo";
 import { getProductsFromShop, getShopMetadata } from "@/lib/nostr/market";
 import { getUser } from "@/lib/nostr/users";
 
@@ -20,26 +18,20 @@ export default async function StorePage({ params }: PageProps) {
   const shopMetadata = await getShopMetadata(npub);
 
   const products: string[] = [];
+  const tags: string[] = [];
+
   const shopProducts = await getProductsFromShop(npub);
-  shopProducts.forEach((event) => {
+  await shopProducts.forEach((event) => {
+    tags.push(...event.tags.hashtags());
     products.push(event.asJson());
   });
 
   return (
-    <>
-      <Header
-        name={shopMetadata?.name || profile.getName()}
-        description={shopMetadata?.about || profile.getAbout()}
-        icon={shopMetadata?.ui.picture || profile.getPicture()}
-      />
-
-      <section className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-y-6 pb-20">
-        {products.map((product, index) => (
-          <ProductCard key={index} product={product} />
-        ))}
-      </section>
-
-      <Footer />
-    </>
+    <ShopInfo
+      name={shopMetadata?.name || profile.getName()}
+      description={shopMetadata?.about || profile.getAbout()}
+      icon={shopMetadata?.ui.picture || profile.getPicture()}
+      productsEvents={products}
+    />
   );
 }

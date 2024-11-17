@@ -12,7 +12,7 @@ const ProductCard = ({ product, soldOut = false, preSale = false }) => {
   const title = productData.tags.find("title")?.content() || "Some product";
 
   const price = productData.tags.find("price")?.content() || 0;
-  const currency = productData.tags.find("price")?.asVec()[2];
+  const currency = productData.tags.find("price")?.asVec()[2] || "sats";
 
   return (
     <article className="group cursor-pointer max-w-xs px-5">
