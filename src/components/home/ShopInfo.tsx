@@ -21,6 +21,7 @@ export const ShopInfo = ({
   productsEvents,
 }: ShopInfoProps) => {
   const [activeTag, setActiveTag] = useState<string>("");
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
   loadWasmSync();
 
@@ -40,18 +41,30 @@ export const ShopInfo = ({
   }, [products]);
 
   const filteredProducts = useMemo(() => {
-    if (!activeTag) {
-      return products;
-    }
-
     return products.filter((product) => {
       const productTags = product.tags.hashtags();
-      return productTags.includes(activeTag);
+      const productContent =
+        product.tags.find("title")?.content()?.toLowerCase() || "";
+      const searchLower = searchQuery.toLowerCase();
+
+      // Tag filter
+      const matchesTag = !activeTag || productTags.includes(activeTag);
+
+      // Search filter
+      const matchesSearch =
+        !searchQuery || productContent.includes(searchLower);
+
+      // Product must match both filters
+      return matchesTag && matchesSearch;
     });
-  }, [products, activeTag]);
+  }, [products, activeTag, searchQuery]);
 
   const handleOnClickTag = (e: React.MouseEvent<HTMLElement>) => {
     setActiveTag((e.target as HTMLInputElement).value);
+  };
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
   };
 
   return (
@@ -67,6 +80,8 @@ export const ShopInfo = ({
 
             <input
               type="text"
+              value={searchQuery}
+              onChange={handleSearch}
               className="bg-white/15 text-white text-sm rounded-lg outline-none border-2 border-transparent focus:border-white/15 block w-full pl-10 px-3 py-1.5"
               placeholder="Search..."
             />
