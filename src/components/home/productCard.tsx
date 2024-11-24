@@ -4,7 +4,15 @@ import Image from "next/image";
 import { Banknote, ImageOff, Zap } from "lucide-react";
 import { Event } from "@rust-nostr/nostr-sdk";
 
-const ProductCard = ({ product, soldOut = false, preSale = false }) => {
+const ProductCard = ({
+  product,
+  soldOut = false,
+  preSale = false,
+}: {
+  product: string;
+  soldOut?: boolean;
+  preSale?: boolean;
+}) => {
   const productData = Event.fromJson(product);
 
   const id = productData.id.toHex();

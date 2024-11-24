@@ -13,7 +13,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 
 interface ProductPageProps {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export async function generateMetadata({

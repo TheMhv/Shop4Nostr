@@ -3,7 +3,7 @@ import { getProductsFromShop, getShopMetadata } from "@/lib/nostr/market";
 import { getUser } from "@/lib/nostr/users";
 
 interface PageProps {
-  params: { npub: string };
+  params: Promise<{ npub: string }>;
 }
 
 export default async function StorePage({ params }: PageProps) {

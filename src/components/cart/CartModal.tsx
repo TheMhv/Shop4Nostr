@@ -39,11 +39,7 @@ const PriceDisplay: React.FC<PriceDisplayProps> = ({ amount, className }) => (
   </span>
 );
 
-const CartItem: React.FC<CartItemProps> = ({
-  item,
-  onUpdateQuantity,
-  onRemove,
-}) => (
+const CartItem: React.FC<CartItemProps> = ({ item, onUpdateQuantity }) => (
   <div className="flex items-center gap-4 py-4 border-b border-white/10">
     <div className="relative size-16 flex-shrink-0">
       {item.image ? (

@@ -16,7 +16,6 @@ export function QuantitySelector({
   onIncrease,
   onDecrease,
   min = 1,
-  max = 99,
   disabled = false,
 }: QuantitySelectorProps) {
   return (

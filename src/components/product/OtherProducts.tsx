@@ -3,7 +3,13 @@ import { ProductCard } from "../home/productCard";
 import Link from "next/link";
 import { getProductsFromShop } from "@/lib/nostr/market";
 
-export async function OtherProducts({ npub, currentProductId }) {
+export async function OtherProducts({
+  npub,
+  currentProductId,
+}: {
+  npub: string;
+  currentProductId: string;
+}) {
   const products: string[] = [];
 
   const shopProducts = await getProductsFromShop(npub);

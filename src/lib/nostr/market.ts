@@ -37,7 +37,7 @@ export function createShop(
       theme: "",
       darkMode: false,
     },
-    merchants: [merchant.toHex()] || [],
+    merchants: merchant.toHex().length >= 1 ? [merchant.toHex()] : [],
   });
 
   return new EventBuilder(new Kind(30019), content, []);
