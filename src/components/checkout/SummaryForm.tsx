@@ -20,46 +20,47 @@ export const SummaryForm = ({ handlePrevStep }: SummaryFormProps) => {
       </div>
 
       <div className="space-y-2 overflow-y-auto h-[calc(100vh-50vh)]">
-        {items.map((item) => (
-          <>
-            <div className="flex items-center gap-4 p-2 rounded-lg shadow transition-colors group">
-              <div className="relative size-20 flex-shrink-0">
-                {item.image ? (
-                  <Image
-                    src={item.image}
-                    fill
-                    alt={item.title}
-                    className="absolute rounded-lg object-cover w-full h-full"
-                    loading="lazy"
-                  />
-                ) : (
-                  <div className="absolute w-full h-full rounded-lg bg-neutral-800 flex items-center justify-center">
-                    <ImageOff className="size-8 text-neutral-500" />
-                  </div>
-                )}
+        {items.map((item, index) => (
+          <div
+            key={index}
+            className="flex items-center gap-4 p-2 rounded-lg shadow transition-colors group"
+          >
+            <div className="relative size-20 flex-shrink-0">
+              {item.image ? (
+                <Image
+                  src={item.image}
+                  fill
+                  alt={item.title}
+                  className="absolute rounded-lg object-cover w-full h-full"
+                  loading="lazy"
+                />
+              ) : (
+                <div className="absolute w-full h-full rounded-lg bg-neutral-800 flex items-center justify-center">
+                  <ImageOff className="size-8 text-neutral-500" />
+                </div>
+              )}
+            </div>
+
+            <div className="flex-1 min-w-0">
+              <div className="flex justify-between items-start">
+                <h3 className="text-sm font-medium truncate">{item.title}</h3>
               </div>
 
-              <div className="flex-1 min-w-0">
-                <div className="flex justify-between items-start">
-                  <h3 className="text-sm font-medium truncate">{item.title}</h3>
+              <div className="flex items-center justify-between mt-2">
+                <div className="flex items-center gap-2">
+                  {item.quantity.toLocaleString()} x{" "}
+                  {item.price.toLocaleString()} Sats
                 </div>
 
-                <div className="flex items-center justify-between mt-2">
-                  <div className="flex items-center gap-2">
-                    {item.quantity.toLocaleString()} x{" "}
-                    {item.price.toLocaleString()} Sats
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    <Zap className="size-4 text-yellow-500" />
-                    <span>
-                      {(item.price * item.quantity).toLocaleString()} Sats
-                    </span>
-                  </div>
+                <div className="flex items-center gap-2">
+                  <Zap className="size-4 text-yellow-500" />
+                  <span>
+                    {(item.price * item.quantity).toLocaleString()} Sats
+                  </span>
                 </div>
               </div>
             </div>
-          </>
+          </div>
         ))}
       </div>
 
