@@ -33,7 +33,11 @@ async function updatePrices(): Promise<PricesType> {
   const btcPrices: PricesType = data.BTC;
 
   Object.entries(btcPrices).forEach((price) => {
-    pricesInSats[price[0]] = price[1];
+    if (price[0] == "BTC") {
+      return;
+    }
+
+    pricesInSats[price[0]] = price[1] / SATS_PER_BTC;
   });
 
   return pricesInSats as PricesType;
