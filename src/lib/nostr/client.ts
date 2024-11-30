@@ -1,4 +1,10 @@
-import { Client, loadWasmAsync } from "@rust-nostr/nostr-sdk";
+import {
+  Client,
+  Keys,
+  loadWasmAsync,
+  NostrSigner,
+  SecretKey,
+} from "@rust-nostr/nostr-sdk";
 import { loadConfig, Settings } from "@/lib/config";
 
 const config: Settings = loadConfig();
@@ -32,7 +38,11 @@ class NostrClientManager {
   private async initializeClient(): Promise<Client> {
     await loadWasmAsync();
 
-    const client = new Client();
+    const signer: NostrSigner | undefined = config.STORE_PRIVKEY
+      ? NostrSigner.keys(new Keys(SecretKey.parse(config.STORE_PRIVKEY)))
+      : undefined;
+
+    const client = new Client(signer || undefined);
 
     const relays = config.RELAYS;
 
