@@ -21,7 +21,7 @@ export const ContactInformationForm = ({
             htmlFor="email"
             className="block mb-2 text-sm font-medium text-gray-200"
           >
-            Email <span className="text-red-500">*</span>
+            Email
           </label>
           <input
             type="email"
@@ -31,7 +31,6 @@ export const ContactInformationForm = ({
             onChange={handleInputChange}
             className="w-full bg-gray-700 border border-gray-600 text-white text-sm rounded-lg p-2.5 placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500"
             placeholder="satoshi@bitcoin.org"
-            required
           />
         </div>
 
@@ -50,6 +49,25 @@ export const ContactInformationForm = ({
             onChange={handleInputChange}
             className="w-full bg-gray-700 border border-gray-600 text-white text-sm rounded-lg p-2.5 placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500"
             placeholder="+9 99999 99999"
+          />
+        </div>
+
+        <div>
+          <label
+            htmlFor="nostr"
+            className="block mb-2 text-sm font-medium text-gray-200"
+          >
+            NOSTR <span className="text-red-500">*</span>
+          </label>
+
+          <input
+            type="text"
+            id="nostr"
+            name="nostr"
+            value={formData.nostr}
+            className="w-full bg-gray-700 border border-gray-600 text-gray-400 text-sm rounded-lg p-2.5"
+            required
+            readOnly
           />
         </div>
 

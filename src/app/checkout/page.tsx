@@ -1,4 +1,5 @@
 import { CheckoutForm } from "@/components/checkout/CheckoutForm";
+import { NostrProvider } from "@/components/NostrProvider";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 
@@ -15,7 +16,9 @@ export default function CheckoutPage() {
           </Link>
         </div>
 
-        <CheckoutForm />
+        <NostrProvider>
+          <CheckoutForm />
+        </NostrProvider>
       </div>
     </main>
   );
