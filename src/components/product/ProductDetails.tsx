@@ -58,10 +58,12 @@ export function ProductDetails({ product, store }: ProductDetailsProps) {
     await addItem({
       id: product.id,
       title: product.title,
+      author: product.author,
       price: product.price,
+      currency: product.currency || "SATS",
       image: product?.images?.at(0),
       quantity: quantity || 1,
-      shipping: product.shipping,
+      shipping: product.shipping?.at(0),
     });
 
     if (buyNow) {

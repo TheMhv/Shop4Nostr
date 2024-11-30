@@ -1,12 +1,15 @@
+import { Currencies } from "./currency";
 import { ShippingMethod } from "./product";
 
 export type CartItem = {
   id: string;
   title: string;
+  author: string;
   price: number;
+  currency: Currencies;
   quantity: number;
   image?: string;
-  shipping?: ShippingMethod[];
+  shipping?: ShippingMethod;
 };
 
 export type CartContextType = {
@@ -17,4 +20,5 @@ export type CartContextType = {
   clearCart: () => void;
   totalItems: number;
   totalPrice: number;
+  totalShipping: number;
 };

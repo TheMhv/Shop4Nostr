@@ -3,7 +3,7 @@ import { Currencies } from "./currency";
 export type ShippingMethod = {
   method: string;
   cost: number;
-  currency: Currencies | string;
+  currency: Currencies;
 };
 
 export type Product = {

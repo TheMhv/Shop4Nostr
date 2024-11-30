@@ -1,6 +1,6 @@
 import { memo } from "react";
 import Image from "next/image";
-import { ImageOff, Minus, Plus, Trash2, Zap } from "lucide-react";
+import { Banknote, ImageOff, Minus, Plus, Trash2, Zap } from "lucide-react";
 import { useCart } from "./CartContext";
 import { CartItem } from "@/types/cart";
 import Link from "next/link";
@@ -40,7 +40,7 @@ export const CartItemCard = memo(({ item }: { item: CartItem }) => {
         <div className="flex-1 min-w-0">
           <div className="flex justify-between items-start">
             <Link href={`/product/${item.id}`}>
-              <h3 className="text-sm font-medium truncate hover:underline">
+              <h3 className="text-sm font-medium hover:underline">
                 {item.title}
               </h3>
             </Link>
@@ -56,8 +56,14 @@ export const CartItemCard = memo(({ item }: { item: CartItem }) => {
 
           <div className="flex items-center justify-between mt-2">
             <div className="flex items-center gap-2">
-              <Zap className="size-4 text-yellow-500" />
-              <span>{subtotal.toLocaleString()} Sats</span>
+              {item.currency == "SATS" ? (
+                <Zap className="text-yellow-500" aria-hidden="true" />
+              ) : (
+                <Banknote className="text-green-700" aria-hidden="true" />
+              )}
+              <span>
+                {subtotal.toLocaleString()} {item.currency}
+              </span>
             </div>
 
             <div className="flex items-center gap-2 w-24 bg-white/10 rounded-lg">

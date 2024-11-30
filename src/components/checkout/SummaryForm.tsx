@@ -2,14 +2,14 @@
 
 import Image from "next/image";
 import { useCart } from "../cart/CartContext";
-import { ImageOff, Zap } from "lucide-react";
+import { Banknote, ImageOff, Zap } from "lucide-react";
 
 interface SummaryFormProps {
   handlePrevStep: () => void;
 }
 
 export const SummaryForm = ({ handlePrevStep }: SummaryFormProps) => {
-  const { items, totalPrice } = useCart();
+  const { items, totalPrice, totalShipping } = useCart();
 
   console.log(items);
 
@@ -53,9 +53,14 @@ export const SummaryForm = ({ handlePrevStep }: SummaryFormProps) => {
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <Zap className="size-4 text-yellow-500" />
+                  {item.currency == "SATS" ? (
+                    <Zap className="text-yellow-500" aria-hidden="true" />
+                  ) : (
+                    <Banknote className="text-green-700" aria-hidden="true" />
+                  )}
                   <span>
-                    {(item.price * item.quantity).toLocaleString()} Sats
+                    {(item.price * item.quantity).toLocaleString()}{" "}
+                    {item.currency}
                   </span>
                 </div>
               </div>
@@ -64,12 +69,20 @@ export const SummaryForm = ({ handlePrevStep }: SummaryFormProps) => {
         ))}
       </div>
 
-      <div className="space-y-6">
+      <div>
+        <div className="flex items-center justify-between text-sm font-medium gap-4 pt-4">
+          <span>Shipping</span>
+          <span>
+            <Zap className="inline text-yellow-500 h-4" aria-hidden="true" />
+            <span>{totalShipping.toLocaleString()} SATS</span>
+          </span>
+        </div>
+
         <div className="flex items-center justify-between text-lg font-medium gap-4 pt-4">
           <span>Total</span>
           <span className="space-x-2">
             <Zap className="inline text-yellow-500" aria-hidden="true" />
-            <span>{totalPrice.toLocaleString()} Sats</span>
+            <span>{totalPrice.toLocaleString()} SATS</span>
           </span>
         </div>
       </div>
