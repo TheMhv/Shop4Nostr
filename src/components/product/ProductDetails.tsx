@@ -59,8 +59,9 @@ export function ProductDetails({ product, store }: ProductDetailsProps) {
       id: product.id,
       title: product.title,
       price: product.price,
-      image: product.images[0],
+      image: product?.images?.at(0),
       quantity: quantity || 1,
+      shipping: product.shipping,
     });
 
     if (buyNow) {
@@ -83,13 +84,13 @@ export function ProductDetails({ product, store }: ProductDetailsProps) {
           </div>
 
           <div className="flex items-center gap-2 text-3xl font-bold">
-            {product.currency.toLowerCase() == "sats" ? (
+            {product.currency == "SATS" ? (
               <Zap className="text-yellow-500" aria-hidden="true" />
             ) : (
               <Banknote className="text-green-700" aria-hidden="true" />
             )}
             <span>
-              {product.price.toLocaleString()} {product.currency.toLowerCase()}
+              {product.price.toLocaleString()} {product.currency}
             </span>
           </div>
         </div>
@@ -105,7 +106,7 @@ export function ProductDetails({ product, store }: ProductDetailsProps) {
             quantity={quantity}
             onIncrease={() => setQuantity((q) => q + 1)}
             onDecrease={() => setQuantity((q) => Math.max(q - 1, 1))}
-            disabled={!product.inStock || isAddingToCart}
+            disabled={product.status !== "active" || isAddingToCart}
           />
         </div>
 
@@ -113,7 +114,7 @@ export function ProductDetails({ product, store }: ProductDetailsProps) {
           <button
             className="w-full py-3 px-6 rounded-full font-semibold hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed bg-white text-black"
             onClick={() => handleAddToCart(true)}
-            disabled={!product.inStock || isAddingToCart}
+            disabled={product.status !== "active" || isAddingToCart}
           >
             {isAddingToCart ? "Adding..." : "Buy now"}
           </button>
@@ -121,7 +122,7 @@ export function ProductDetails({ product, store }: ProductDetailsProps) {
           <button
             className="w-full py-3 px-6 rounded-full font-semibold hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed bg-white/15 text-white"
             onClick={() => handleAddToCart(false)}
-            disabled={!product.inStock || isAddingToCart}
+            disabled={product.status !== "active" || isAddingToCart}
           >
             {isAddingToCart ? "Adding..." : "Add to cart"}
           </button>

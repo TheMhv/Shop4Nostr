@@ -1,9 +1,12 @@
+import { ShippingMethod } from "./product";
+
 export type CartItem = {
   id: string;
   title: string;
   price: number;
-  image?: string;
   quantity: number;
+  image?: string;
+  shipping?: ShippingMethod[];
 };
 
 export type CartContextType = {

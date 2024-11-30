@@ -28,7 +28,7 @@ export async function generateMetadata({
     openGraph: {
       title: product.title,
       description: product.description,
-      images: product.images[0] ? [product.images[0]] : [],
+      images: [product.images?.at(0) || ""],
     },
   };
 }
@@ -37,13 +37,13 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const { id } = await params;
   const product = await getProduct(id);
 
-  const profile = await getUser(product.npub);
-  const shopMetadata = await getShopMetadata(product.npub);
+  const profile = await getUser(product.author);
+  const shopMetadata = await getShopMetadata(product.author);
 
   const store = {
     name: shopMetadata?.name || profile.getName(),
     icon: shopMetadata?.ui.picture || profile.getPicture(),
-    npub: product.npub,
+    npub: product.author,
   };
 
   return (
@@ -58,7 +58,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
       <main className="mx-auto max-w-7xl px-4 pt-20 space-y-16">
         <div className="grid md:grid-cols-2 gap-8 md:gap-32">
-          <ProductGallery images={product.images} title={product.title} />
+          {product.images && (
+            <ProductGallery images={product.images} title={product.title} />
+          )}
 
           <Suspense fallback={<ProductDetailsSkeleton />}>
             <ProductDetails product={product} store={store} />
@@ -66,7 +68,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
         </div>
 
         <Suspense fallback={<OtherProductsSkeleton />}>
-          <OtherProducts npub={product.npub} currentProductId={product.id} />
+          <OtherProducts npub={product.author} currentProductId={product.id} />
         </Suspense>
       </main>
 

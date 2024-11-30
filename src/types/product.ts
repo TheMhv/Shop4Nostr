@@ -1,14 +1,25 @@
-export interface Product {
+import { Currencies } from "./currency";
+
+export type ShippingMethod = {
+  method: string;
+  cost: number;
+  currency: Currencies | string;
+};
+
+export type Product = {
   id: string;
+  author: string;
   title: string;
-  description: string;
   price: number;
-  currency: string;
-  images: string[];
-  inStock: boolean;
-  slug: string;
-  tags: string[];
-}
+  status: string;
+  description?: string;
+  currency?: Currencies;
+  images?: string[];
+  condition?: string;
+  location?: string;
+  tags?: string[];
+  shipping?: ShippingMethod[];
+};
 
 export interface CartItem extends Pick<Product, "id" | "title" | "price"> {
   quantity: number;

@@ -1,41 +1,67 @@
+import { Product, ShippingMethod } from "@/types/product";
 import { getProductByEventId } from "./nostr/market";
+import { Currencies } from "@/types/currency";
 
-export class ProductNotFoundError extends Error {
-  constructor(id: string) {
-    super(`Product with ID ${id} not found`);
-    this.name = "ProductNotFoundError";
-  }
-}
-
-export async function getProduct(id: string) {
+export async function getProduct(id: string): Promise<Product> {
   try {
     const productEvent = await getProductByEventId(id);
-    console.log(productEvent?.asPrettyJson());
 
-    const images: string[] = [];
+    if (!productEvent) throw new Error("Failed to fetch product");
 
-    productEvent?.tags.filter("image").forEach((imageTag) => {
-      images.push(imageTag.content() || "");
+    const productId = productEvent.id.toHex();
+    const author = productEvent.author.toBech32();
+
+    const productTags = productEvent.tags;
+
+    const title = productTags.find("title")?.content() || "";
+    const status = productTags.find("status")?.content() || "active";
+
+    const description =
+      productTags.find("summary")?.content() || productEvent.content || "";
+
+    const priceTag = productEvent?.tags.find("price");
+    const price = parseInt(priceTag?.content() || "0");
+    const currency = priceTag?.asVec().at(2) || "SATS";
+
+    const images: string[] = productTags.filter("image").map((tag) => {
+      return tag.content() || "";
     });
 
-    const product = {
-      id: productEvent?.id.toHex() || "",
-      title: productEvent?.tags.find("title")?.content() || "Sample Product",
-      description:
-        productEvent?.tags.find("summary")?.content() || "Sample Summary",
-      price: parseInt(productEvent?.tags.find("price")?.content() || "0"),
-      currency: productEvent?.tags.find("price")?.asVec().at(2) || "sats",
-      inStock: productEvent?.tags.find("status")?.content() == "active" || true,
+    const condition = productTags.find("condition")?.content();
+    const location = productTags.find("location")?.content();
+
+    const tags = productTags.hashtags();
+
+    const shipping: ShippingMethod[] = productTags
+      .filter("shipping")
+      .map((tag) => {
+        const values = tag.asVec();
+
+        return {
+          method: values.at(1) || "N/A",
+          cost: parseInt(values.at(2) || "0"),
+          currency: values.at(3) || "SATS",
+        };
+      });
+
+    const product: Product = {
+      id: productId,
+      author: author,
+      title: title,
+      price: price,
+      status: status,
+      description: description,
+      currency: currency as Currencies,
       images: images,
-      slug: "sample-product",
-      tags: productEvent?.tags.hashtags() || [],
-      npub: productEvent?.author.toBech32() || "",
+      condition: condition,
+      location: location,
+      tags: tags,
+      shipping: shipping,
     };
 
-    if (!product) throw new ProductNotFoundError(id);
     return product;
   } catch (error) {
-    if (error instanceof ProductNotFoundError) throw error;
+    console.error(error);
     throw new Error("Failed to fetch product");
   }
 }
