@@ -41,7 +41,7 @@ export async function getProduct(id: string): Promise<Product> {
           method: values.at(1) || "N/A",
           cost: parseInt(values.at(2) || "0"),
           currency: values.at(3) || "SATS",
-        };
+        } as ShippingMethod;
       });
 
     const product: Product = {
