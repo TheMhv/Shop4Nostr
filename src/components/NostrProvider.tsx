@@ -51,7 +51,7 @@ const NostrProvider: React.FC<NostrProviderProps> = ({ relays, children }) => {
     newClient.connect().then(() => {
       setClient(newClient);
     });
-  }, []);
+  }, [relays]);
 
   return (
     <NostrContext.Provider
