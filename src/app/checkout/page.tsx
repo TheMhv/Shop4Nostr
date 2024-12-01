@@ -20,7 +20,7 @@ export default function CheckoutPage() {
         </div>
 
         <NostrProvider relays={config.RELAYS}>
-          <CheckoutForm />
+          <CheckoutForm shopPubKey={config.STORE_PUBKEY} />
         </NostrProvider>
       </div>
     </main>

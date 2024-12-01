@@ -16,7 +16,7 @@ export type checkoutPageFormData = {
   message?: string;
 };
 
-export const CheckoutForm = () => {
+export const CheckoutForm = ({ shopPubKey }: { shopPubKey: string }) => {
   const { client, pubKey } = useContext(NostrContext);
   const [step, setStep] = useState<number>(1);
   const [formData, setFormData] = useState<checkoutPageFormData>({
