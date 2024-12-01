@@ -1,17 +1,18 @@
 "use Client";
 
 import Image from "next/image";
-import { useCart } from "../cart/CartContext";
 import { Banknote, ImageOff, Zap } from "lucide-react";
+import { CartContextType } from "@/types/cart";
 
 interface SummaryFormProps {
+  cart: CartContextType;
   handlePrevStep: () => void;
 }
 
-export const SummaryForm = ({ handlePrevStep }: SummaryFormProps) => {
-  const { items, totalPrice, totalShipping } = useCart();
+export const SummaryForm = ({ cart, handlePrevStep }: SummaryFormProps) => {
+  const { items, totalPrice, totalShipping } = cart;
 
-  console.log(items);
+  const totalCartPrice = totalPrice + totalShipping;
 
   return (
     <>
@@ -82,7 +83,7 @@ export const SummaryForm = ({ handlePrevStep }: SummaryFormProps) => {
           <span>Total</span>
           <span className="space-x-2">
             <Zap className="inline text-yellow-500" aria-hidden="true" />
-            <span>{totalPrice.toLocaleString()} SATS</span>
+            <span>{totalCartPrice.toLocaleString()} SATS</span>
           </span>
         </div>
       </div>

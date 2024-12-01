@@ -17,6 +17,7 @@ export type checkoutPageFormData = {
 
 export const CheckoutForm = () => {
   const { client, pubKey } = useContext(NostrContext);
+  const cartContext = useCart();
 
   useEffect(() => {
     if (!client || !pubKey) {
@@ -136,7 +137,7 @@ export const CheckoutForm = () => {
           {step === 4 ? (
             <InvoiceForm handlePrevStep={handlePrevStep} />
           ) : step === 3 ? (
-            <SummaryForm handlePrevStep={handlePrevStep} />
+            <SummaryForm cart={cartContext} handlePrevStep={handlePrevStep} />
           ) : step === 2 ? (
             <ShippingInformationForm
               formData={formData}
