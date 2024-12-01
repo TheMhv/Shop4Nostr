@@ -8,9 +8,9 @@ import {
   NostrSigner,
   PublicKey,
 } from "@rust-nostr/nostr-sdk";
-import { Settings, loadConfig } from "@/lib/config";
 
 interface NostrProviderProps {
+  relays: string[];
   children: React.ReactNode;
 }
 
@@ -26,9 +26,7 @@ const NostrContext = createContext({
   pubKey: null,
 } as NostrContextProps);
 
-const config: Settings = loadConfig();
-
-const NostrProvider: React.FC<NostrProviderProps> = ({ children }) => {
+const NostrProvider: React.FC<NostrProviderProps> = ({ relays, children }) => {
   const [client, setClient] = useState<Client | null>(null);
   const [signer, setSigner] = useState<Nip07Signer | null>(null);
   const [pubKey, setPubKey] = useState<PublicKey | null>(null);
@@ -46,7 +44,6 @@ const NostrProvider: React.FC<NostrProviderProps> = ({ children }) => {
     const newSigner = NostrSigner.nip07(nip07Signer);
     const newClient = new Client(newSigner);
 
-    const relays = config.RELAYS;
     relays.map(async (relay) => {
       await newClient.addRelay(relay);
     });

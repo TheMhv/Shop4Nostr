@@ -1,7 +1,10 @@
 import { CheckoutForm } from "@/components/checkout/CheckoutForm";
 import { NostrProvider } from "@/components/NostrProvider";
+import { loadConfig, Settings } from "@/lib/config";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
+
+const config: Settings = loadConfig();
 
 export default function CheckoutPage() {
   return (
@@ -16,7 +19,7 @@ export default function CheckoutPage() {
           </Link>
         </div>
 
-        <NostrProvider>
+        <NostrProvider relays={config.RELAYS}>
           <CheckoutForm />
         </NostrProvider>
       </div>

@@ -1,7 +1,10 @@
 import { ShopCreateForm } from "@/components/market/ShopCreateForm";
 import { NostrProvider } from "@/components/NostrProvider";
+import { loadConfig, Settings } from "@/lib/config";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
+
+const config: Settings = loadConfig();
 
 export default function CreateShopPage() {
   return (
@@ -17,7 +20,7 @@ export default function CreateShopPage() {
         </div>
 
         <div className="bg-gray-800 border border-gray-700 rounded-lg p-6">
-          <NostrProvider>
+          <NostrProvider relays={config.RELAYS}>
             <ShopCreateForm />
           </NostrProvider>
         </div>
