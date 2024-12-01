@@ -8,15 +8,26 @@ import { SummaryForm } from "./SummaryForm";
 import { NostrContext } from "../NostrProvider";
 
 export type checkoutPageFormData = {
-  email: string;
-  telephone?: string;
+  nostr: string;
   name: string;
   address: string;
-  nostr: string;
+  email: string;
+  telephone?: string;
+  message?: string;
 };
 
 export const CheckoutForm = () => {
   const { client, pubKey } = useContext(NostrContext);
+  const [step, setStep] = useState<number>(1);
+  const [formData, setFormData] = useState<checkoutPageFormData>({
+    nostr: "",
+    name: "",
+    address: "",
+    email: "",
+    telephone: "",
+    message: "",
+  });
+
   const cartContext = useCart();
 
   useEffect(() => {
