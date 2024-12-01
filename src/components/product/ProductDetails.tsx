@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useCart } from "@/components/cart/CartContext";
-import { Product } from "@/types/product";
+import { Product, ShippingMethod } from "@/types/product";
 import { Banknote, Store, Zap } from "lucide-react";
 import { QuantitySelector } from "./QuantitySelector";
 import Link from "next/link";
@@ -49,6 +49,9 @@ const StoreHeader = ({
 
 export function ProductDetails({ product, store }: ProductDetailsProps) {
   const [quantity, setQuantity] = useState(1);
+  const [shippingMethod, setShippingMethod] = useState<
+    ShippingMethod | undefined
+  >(product.shipping?.at(0));
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const { addItem } = useCart();
 
@@ -63,7 +66,7 @@ export function ProductDetails({ product, store }: ProductDetailsProps) {
       currency: product.currency || "SATS",
       image: product?.images?.at(0),
       quantity: quantity || 1,
-      shipping: product.shipping?.at(0),
+      shipping: shippingMethod,
     });
 
     if (buyNow) {
@@ -111,6 +114,32 @@ export function ProductDetails({ product, store }: ProductDetailsProps) {
             disabled={product.status !== "active" || isAddingToCart}
           />
         </div>
+
+        {product.shipping && (
+          <div className="flex flex-col items-center gap-2">
+            <label htmlFor="shipping_method" className="font-semibold w-full">
+              Shipping Method
+            </label>
+
+            <select
+              name="shipping"
+              id="shipping_method"
+              defaultValue={0}
+              onChange={(e) =>
+                setShippingMethod(
+                  product.shipping?.at(parseInt(e.target.value))
+                )
+              }
+              className="bg-white/15 border border-gray-600 text-white text-sm rounded-lg block w-full p-2.5 placeholder-gray-400"
+            >
+              {product.shipping.map((shipping_method, keyIndex) => (
+                <option key={keyIndex} value={keyIndex} className="text-black">
+                  {`${shipping_method.method} - ${shipping_method.cost} ${shipping_method.currency}`}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
 
         <div className="space-y-4">
           <button
