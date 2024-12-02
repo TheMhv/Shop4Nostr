@@ -30,7 +30,7 @@ export async function OtherProducts({
         <h2 className="font-semibold text-xl">See also</h2>
 
         <Link
-          href={`/shop/${npub}`}
+          href={`/`}
           className="flex items-center gap-2 font-semibold hover:scale-105 transition-all group"
         >
           <span>See all</span>

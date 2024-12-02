@@ -13,20 +13,11 @@ interface ProductDetailsProps {
   store: {
     name?: string;
     icon?: string;
-    npub: string;
   };
 }
 
-const StoreHeader = ({
-  icon,
-  name,
-  npub,
-}: {
-  icon?: string;
-  name: string;
-  npub: string;
-}) => (
-  <Link href={`/shop/${npub}`} className="group">
+const StoreHeader = ({ icon, name }: { icon?: string; name: string }) => (
+  <Link href={`/`} className="group">
     <div className="flex gap-x-3 items-center">
       <div className="flex items-center shrink-0 relative size-8">
         {icon ? (
@@ -79,9 +70,7 @@ export function ProductDetails({ product, store }: ProductDetailsProps) {
   return (
     <div className="space-y-14">
       <div className="space-y-6">
-        {store.name && (
-          <StoreHeader name={store.name} icon={store.icon} npub={store.npub} />
-        )}
+        {store.name && <StoreHeader name={store.name} icon={store.icon} />}
 
         <div className="space-y-6">
           <div className="flex items-start justify-between">
