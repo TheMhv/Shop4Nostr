@@ -9,15 +9,17 @@ import Image from "next/image";
 export default function ProfileBadge() {
   const { client, pubKey } = useContext(NostrContext);
   const [user, setUser] = useState<Metadata | undefined>();
-
-  const picture = user?.getPicture();
+  const [picture, setPicture] = useState<string | undefined>();
 
   useEffect(() => {
     if (!client || !pubKey) {
       return;
     }
 
-    client.fetchMetadata(pubKey).then((profile) => setUser(profile));
+    client.fetchMetadata(pubKey).then((profile) => {
+      setUser(profile);
+      setPicture(profile.getPicture());
+    });
   }, [client, pubKey]);
 
   return (
