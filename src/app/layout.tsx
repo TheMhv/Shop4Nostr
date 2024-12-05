@@ -2,9 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { CartProvider } from "@/components/cart/CartProvider";
-import { NostrProvider } from "@/components/NostrProvider";
 import { loadConfig, Settings } from "@/lib/config";
-import ProfileBadge from "@/components/cornerMenu/ProfileBadge";
 import { getUser } from "@/lib/nostr/users";
 import { getShopMetadata } from "@/lib/nostr/market";
 
