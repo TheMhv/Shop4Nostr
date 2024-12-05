@@ -34,23 +34,28 @@ const NostrProvider: React.FC<NostrProviderProps> = ({ relays, children }) => {
   loadWasmSync();
 
   useEffect(() => {
-    const nip07Signer = new Nip07Signer();
-    setSigner(nip07Signer);
+    try {
+      const nip07Signer = new Nip07Signer();
+      setSigner(nip07Signer);
 
-    nip07Signer.getPublicKey().then((signerPubKey) => {
-      setPubKey(signerPubKey);
-    });
+      nip07Signer.getPublicKey().then((signerPubKey) => {
+        setPubKey(signerPubKey);
+      });
 
-    const newSigner = NostrSigner.nip07(nip07Signer);
-    const newClient = new Client(newSigner);
+      const newSigner = NostrSigner.nip07(nip07Signer);
+      const newClient = new Client(newSigner);
 
-    relays.map(async (relay) => {
-      await newClient.addRelay(relay);
-    });
+      relays.map(async (relay) => {
+        await newClient.addRelay(relay);
+      });
 
-    newClient.connect().then(() => {
-      setClient(newClient);
-    });
+      newClient.connect().then(() => {
+        setClient(newClient);
+      });
+    } catch (error) {
+      // throw new Error("Failed to fetch nostr profile");
+      console.error(error);
+    }
   }, [relays]);
 
   return (
