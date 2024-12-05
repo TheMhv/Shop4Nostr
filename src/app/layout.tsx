@@ -46,12 +46,6 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        //<div className="fixed top-0 right-0 p-10 z-20">
-         // <NostrProvider relays={config.RELAYS}>
-          //  <ProfileBadge></ProfileBadge>
-          //</NostrProvider>
-     //   </div>
-
         <CartProvider>
           <main className="container max-w-[870px] mx-auto px-4 space-y-8">
             {children}
