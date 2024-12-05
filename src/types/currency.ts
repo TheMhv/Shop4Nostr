@@ -1,3 +1,8 @@
+export type CurrencyContextType = {
+  currency: Currencies;
+  changeCurrency: (newCurrency: Currencies) => void;
+};
+
 export type PricesType = Record<Currencies, number>;
 
 export type Currencies =

@@ -102,7 +102,7 @@ export const SummaryForm = ({ cart, handlePrevStep }: SummaryFormProps) => {
             type="submit"
             className="w-full py-3 px-6 bg-white text-black rounded-full font-semibold hover:bg-gray-100 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Pay
+            Create Order
           </button>
         </div>
       </div>

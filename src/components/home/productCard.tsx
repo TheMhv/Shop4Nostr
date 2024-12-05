@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Banknote, ImageOff, Zap } from "lucide-react";
 import { Event } from "@rust-nostr/nostr-sdk";
+import { CurrencyContext } from "../CurrencyProvider";
+import { convert } from "@/lib/currency";
+import { Currencies } from "@/types/currency";
 
 const ProductCard = ({
   product,
@@ -13,14 +16,44 @@ const ProductCard = ({
   soldOut?: boolean;
   preSale?: boolean;
 }) => {
+  const { currency } = useContext(CurrencyContext);
+
   const productData = Event.fromJson(product);
 
   const id = productData.id.toHex();
   const image = productData.tags.find("image")?.content() || "";
   const title = productData.tags.find("title")?.content() || "Some product";
 
-  const price = productData.tags.find("price")?.content() || 0;
-  const currency = productData.tags.find("price")?.asVec()[2] || "sats";
+  const productPrice = parseInt(
+    productData.tags.find("price")?.content() || "0"
+  );
+  const productCurrency = productData.tags.find("price")?.asVec()[2] || "SATS";
+
+  const [convertedPrice, setConvertedPrice] = useState<number>(productPrice);
+  const [showCurrency, setCurrency] = useState<string>(productCurrency);
+
+  useEffect(() => {
+    const fetchConvertedPrice = async () => {
+      try {
+        const converted = await convert(
+          productPrice,
+          productCurrency as Currencies,
+          currency
+        );
+
+        if (converted) {
+          setConvertedPrice(converted);
+          setCurrency(currency);
+        }
+      } catch (error) {
+        console.error(error);
+        setConvertedPrice(productPrice);
+        setCurrency(productCurrency);
+      }
+    };
+
+    fetchConvertedPrice();
+  }, [productPrice, productCurrency, currency]);
 
   return (
     <article className="group cursor-pointer max-w-xs px-5">
@@ -60,14 +93,14 @@ const ProductCard = ({
             {title}
           </h2>
           <div className="flex items-center gap-2 text-lg leading-[130%] font-semibold">
-            {currency?.toLowerCase() == "sats" ? (
+            {currency == "SATS" ? (
               <Zap className="text-yellow-500" aria-hidden="true" />
             ) : (
               <Banknote className="text-green-700" aria-hidden="true" />
             )}
 
             <span>
-              {price.toLocaleString()} {currency?.toLowerCase()}
+              {Math.ceil(convertedPrice)} {showCurrency}
             </span>
           </div>
         </div>
