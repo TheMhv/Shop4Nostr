@@ -22,7 +22,9 @@ export default function ProfileBadge() {
     });
   }, [client, pubKey]);
 
-  return (
+  return !client ? (
+    <></>
+  ) : (
     <>
       <button className="flex items-center gap-2 w-full p-2 rounded-full font-semibold hover:scale-105 transition-all bg-neutral-800 text-white">
         <div className="relative w-10 h-10 flex-shrink-0">
