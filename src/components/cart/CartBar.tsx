@@ -1,11 +1,18 @@
 "use client";
 
-import React, { useState } from "react";
-import { ArrowRight, ImageOff, ShoppingCart, Zap } from "lucide-react";
+import React, { useContext, useState } from "react";
+import {
+  ArrowRight,
+  Banknote,
+  ImageOff,
+  ShoppingCart,
+  Zap,
+} from "lucide-react";
 import { useCart } from "./CartContext";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { CartModal } from "./CartModal";
+import { CurrencyContext } from "../CurrencyProvider";
 
 interface CartItem {
   id: string;
@@ -26,6 +33,7 @@ interface CartItemImageProps {
 
 interface PriceDisplayProps {
   amount: number;
+  currency: string;
   className?: string;
 }
 
@@ -57,10 +65,20 @@ const CartItemImage: React.FC<CartItemImageProps> = ({ item }) => (
   </span>
 );
 
-const PriceDisplay: React.FC<PriceDisplayProps> = ({ amount, className }) => (
+const PriceDisplay: React.FC<PriceDisplayProps> = ({
+  amount,
+  currency,
+  className,
+}) => (
   <span className={cn("flex items-center gap-2", className)}>
-    <Zap className="inline text-yellow-500" aria-hidden="true" />
-    <span>{amount.toLocaleString()} Sats</span>
+    {currency == "SATS" ? (
+      <Zap className="inline text-yellow-500" aria-hidden="true" />
+    ) : (
+      <Banknote className="inline text-green-700" aria-hidden="true" />
+    )}
+    <span>
+      {Math.ceil(amount)} {currency}
+    </span>
   </span>
 );
 
@@ -74,6 +92,8 @@ const ViewCartButton: React.FC = () => (
 export const CartBar: React.FC = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const { items, totalItems, totalPrice } = useCart();
+
+  const { currency } = useContext(CurrencyContext);
 
   if (items.length == 0) {
     return;
@@ -126,7 +146,7 @@ export const CartBar: React.FC = () => {
               </div>
             )}
 
-            <PriceDisplay amount={totalPrice} />
+            <PriceDisplay amount={totalPrice} currency={currency} />
 
             <ViewCartButton />
           </div>
