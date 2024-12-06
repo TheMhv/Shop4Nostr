@@ -5,6 +5,7 @@ import { CartProvider } from "@/components/cart/CartProvider";
 import { loadConfig, Settings } from "@/lib/config";
 import { getUser } from "@/lib/nostr/users";
 import { getShopMetadata } from "@/lib/nostr/market";
+import { CurrencyProvider } from "@/components/CurrencyProvider";
 import { NostrProvider } from "@/components/NostrProvider";
 import ProfileBadge from "@/components/cornerMenu/ProfileBadge";
 
@@ -52,11 +53,13 @@ export default function RootLayout({
           </NostrProvider>
         </div>
 
-        <CartProvider>
-          <main className="container max-w-[870px] mx-auto px-4 space-y-8">
-            {children}
-          </main>
-        </CartProvider>
+        <CurrencyProvider>
+          <CartProvider>
+            <main className="container max-w-[870px] mx-auto px-4 space-y-8">
+              {children}
+            </main>
+          </CartProvider>
+        </CurrencyProvider>
       </body>
     </html>
   );
