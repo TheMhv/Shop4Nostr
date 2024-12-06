@@ -17,20 +17,6 @@ import Link from "next/link";
 import { Currencies } from "@/types/currency";
 import { CurrencyContext } from "../CurrencyProvider";
 
-interface CartItem {
-  id: string;
-  image?: string;
-  title: string;
-  quantity: number;
-  price: number;
-}
-
-interface CartItemProps {
-  item: CartItem;
-  onUpdateQuantity: (id: string, quantity: number) => void;
-  onRemove: (id: string) => void;
-}
-
 interface PriceDisplayProps {
   amount: number;
   currency: Currencies;
