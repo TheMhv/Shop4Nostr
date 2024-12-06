@@ -3,6 +3,8 @@
 import Image from "next/image";
 import { Banknote, Bitcoin, ImageOff, Zap } from "lucide-react";
 import { CartContextType } from "@/types/cart";
+import { useContext } from "react";
+import { CurrencyContext } from "../CurrencyProvider";
 
 interface SummaryFormProps {
   cart: CartContextType;
@@ -10,6 +12,7 @@ interface SummaryFormProps {
 }
 
 export const SummaryForm = ({ cart, handlePrevStep }: SummaryFormProps) => {
+  const { currency } = useContext(CurrencyContext);
   const { items, totalPrice, totalShipping } = cart;
 
   const totalCartPrice = totalPrice + totalShipping;
@@ -49,8 +52,8 @@ export const SummaryForm = ({ cart, handlePrevStep }: SummaryFormProps) => {
 
               <div className="flex items-center justify-between mt-2">
                 <div className="flex items-center gap-2">
-                  {item.quantity.toLocaleString()} x{" "}
-                  {item.price.toLocaleString()} Sats
+                  {item.quantity.toLocaleString()} x {Math.ceil(item.price)}{" "}
+                  {item.currency}
                 </div>
 
                 <div className="flex items-center gap-2">
@@ -62,8 +65,7 @@ export const SummaryForm = ({ cart, handlePrevStep }: SummaryFormProps) => {
                     <Banknote className="text-green-700" aria-hidden="true" />
                   )}
                   <span>
-                    {(item.price * item.quantity).toLocaleString()}{" "}
-                    {item.currency}
+                    {Math.ceil(item.price * item.quantity)} {item.currency}
                   </span>
                 </div>
               </div>
@@ -76,16 +78,40 @@ export const SummaryForm = ({ cart, handlePrevStep }: SummaryFormProps) => {
         <div className="flex items-center justify-between text-sm font-medium gap-4 pt-4">
           <span>Shipping</span>
           <span>
-            <Zap className="inline text-yellow-500 h-4" aria-hidden="true" />
-            <span>{totalShipping.toLocaleString()} SATS</span>
+            {currency == "SATS" ? (
+              <Zap className="inline text-yellow-500 h-4" aria-hidden="true" />
+            ) : currency == "BTC" ? (
+              <Bitcoin
+                className="inline text-yellow-500 h-4"
+                aria-hidden="true"
+              />
+            ) : (
+              <Banknote
+                className="inline text-green-700 h-4"
+                aria-hidden="true"
+              />
+            )}
+
+            <span>
+              {Math.ceil(totalShipping)} {currency}
+            </span>
           </span>
         </div>
 
         <div className="flex items-center justify-between text-lg font-medium gap-4 pt-4">
           <span>Total</span>
           <span className="space-x-2">
-            <Zap className="inline text-yellow-500" aria-hidden="true" />
-            <span>{totalCartPrice.toLocaleString()} SATS</span>
+            {currency == "SATS" ? (
+              <Zap className="inline text-yellow-500" aria-hidden="true" />
+            ) : currency == "BTC" ? (
+              <Bitcoin className="inline text-yellow-500" aria-hidden="true" />
+            ) : (
+              <Banknote className="inline text-green-700" aria-hidden="true" />
+            )}
+
+            <span>
+              {Math.ceil(totalCartPrice)} {currency}
+            </span>
           </span>
         </div>
       </div>

@@ -1,12 +1,21 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
-import { ArrowRight, ImageOff, ShoppingCart, Zap, X, Plus } from "lucide-react";
+import React, { useContext, useEffect, useRef } from "react";
+import {
+  ArrowRight,
+  ShoppingCart,
+  Zap,
+  X,
+  Plus,
+  Bitcoin,
+  Banknote,
+} from "lucide-react";
 import { useCart } from "./CartContext";
-import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { CartItemCard } from "./CartItemCard";
 import Link from "next/link";
+import { Currencies } from "@/types/currency";
+import { CurrencyContext } from "../CurrencyProvider";
 
 interface CartItem {
   id: string;
@@ -24,6 +33,7 @@ interface CartItemProps {
 
 interface PriceDisplayProps {
   amount: number;
+  currency: Currencies;
   className?: string;
 }
 
@@ -32,62 +42,25 @@ interface CartModalProps {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const PriceDisplay: React.FC<PriceDisplayProps> = ({ amount, className }) => (
+const PriceDisplay: React.FC<PriceDisplayProps> = ({
+  amount,
+  currency,
+  className,
+}) => (
   <span className={cn("flex items-center gap-2", className)}>
-    <Zap className="inline text-yellow-500" aria-hidden="true" />
-    <span>{amount.toLocaleString()} Sats</span>
+    {currency == "SATS" ? (
+      <Zap className="inline text-yellow-500" aria-hidden="true" />
+    ) : currency == "BTC" ? (
+      <Bitcoin className="inline text-yellow-500" aria-hidden="true" />
+    ) : (
+      <Banknote className="inline text-green-700" aria-hidden="true" />
+    )}
+    {Math.ceil(amount)} {currency}
   </span>
 );
 
-const CartItem: React.FC<CartItemProps> = ({ item, onUpdateQuantity }) => (
-  <div className="flex items-center gap-4 py-4 border-b border-white/10">
-    <div className="relative size-16 flex-shrink-0">
-      {item.image ? (
-        <Image
-          src={item.image}
-          fill
-          alt={item.title}
-          className="rounded-lg object-cover"
-        />
-      ) : (
-        <div className="size-16 rounded-lg bg-neutral-800 flex items-center justify-center">
-          <ImageOff className="size-8 text-neutral-500" />
-        </div>
-      )}
-    </div>
-
-    <div className="flex-1 min-w-0">
-      <h3 className="text-sm font-medium truncate">{item.title}</h3>
-      <PriceDisplay amount={item.price * item.quantity} className="text-sm" />
-
-      <div className="flex items-center gap-4 mt-2">
-        <div className="flex items-center gap-2 bg-white/10 rounded-lg">
-          <button
-            onClick={() =>
-              onUpdateQuantity(item.id, Math.max(0, item.quantity - 1))
-            }
-            className="p-1 hover:bg-white/20 rounded-l-lg transition-colors"
-            aria-label="Decrease quantity"
-          >
-            -
-          </button>
-
-          <span className="w-8 text-center">{item.quantity}</span>
-
-          <button
-            onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}
-            className="p-1 hover:bg-white/20 rounded-r-lg transition-colors"
-            aria-label="Increase quantity"
-          >
-            +
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-);
-
 export const CartModal: React.FC<CartModalProps> = ({ isOpen, setIsOpen }) => {
+  const { currency } = useContext(CurrencyContext);
   const { items, totalItems, totalPrice } = useCart();
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -199,7 +172,7 @@ export const CartModal: React.FC<CartModalProps> = ({ isOpen, setIsOpen }) => {
             <div className="border-t border-white/10 px-6 py-4 space-y-4 bg-neutral-900">
               <div className="flex items-center justify-between text-lg font-medium">
                 <span>Total</span>
-                <PriceDisplay amount={totalPrice} />
+                <PriceDisplay amount={totalPrice} currency={currency} />
               </div>
 
               <Link href="/checkout">

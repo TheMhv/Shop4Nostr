@@ -158,7 +158,9 @@ export const CartBar: React.FC = () => {
         <button
           className="absolute left-0 top-0 size-full opacity-0"
           onClick={handleCartClick}
-          aria-label={`Open cart with ${totalItems} items, total ${totalPrice.toLocaleString()} Sats`}
+          aria-label={`Open cart with ${totalItems} items, total ${Math.ceil(
+            totalPrice
+          )} ${currency}`}
           data-testid="cart-open-btn"
         />
       </section>

@@ -72,7 +72,7 @@ export const CartItemCard = memo(({ item }: { item: CartItem }) => {
                 <Banknote className="text-green-700" aria-hidden="true" />
               )}
               <span>
-                {subtotal.toLocaleString()} {item.currency}
+                {Math.ceil(subtotal)} {item.currency}
               </span>
             </div>
 

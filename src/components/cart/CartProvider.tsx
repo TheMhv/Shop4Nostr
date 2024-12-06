@@ -1,11 +1,13 @@
 "use client";
 
-import { useEffect, useState, useCallback, useMemo } from "react";
+import { useEffect, useState, useCallback, useMemo, useContext } from "react";
 import { CartContext } from "./CartContext";
 import { CartItem } from "@/types/cart";
 import { convert } from "@/lib/currency";
+import { CurrencyContext } from "../CurrencyProvider";
 
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
+  const { currency } = useContext(CurrencyContext);
   const [items, setItems] = useState<CartItem[]>([]);
 
   const cartTotals = useMemo(() => {
@@ -34,24 +36,26 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   const addItem = useCallback(async (newItem: CartItem) => {
-    // TODO: Make a converter based on client choice
-    if (newItem.currency !== "SATS") {
-      newItem.price =
-        (await convert(newItem.price, newItem.currency, "SATS")) ||
-        newItem.price;
-      newItem.currency = "SATS";
+    if (newItem.currency !== currency) {
+      newItem.price = Math.ceil(
+        (await convert(newItem.price, newItem.currency, currency)) ||
+          newItem.price
+      );
+
+      newItem.currency = currency;
     }
 
-    if (newItem.shipping && newItem.shipping.currency !== "SATS") {
-      newItem.shipping.cost =
+    if (newItem.shipping && newItem.shipping.currency !== currency) {
+      newItem.shipping.cost = Math.ceil(
         (await convert(
           newItem.shipping.cost,
           newItem.shipping.currency,
-          "SATS"
-        )) || newItem.shipping.cost;
-      newItem.shipping.currency = "SATS";
+          currency
+        )) || newItem.shipping.cost
+      );
+
+      newItem.shipping.currency = currency;
     }
-    //
 
     setItems((currentItems) => {
       const existingItem = currentItems.find((item) => item.id === newItem.id);
