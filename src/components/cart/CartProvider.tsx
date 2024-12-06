@@ -7,7 +7,6 @@ import { convert } from "@/lib/currency";
 
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const [items, setItems] = useState<CartItem[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
 
   const cartTotals = useMemo(() => {
     return items.reduce(
@@ -22,19 +21,16 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      if (!isLoading) {
-        localStorage.setItem("cart", JSON.stringify(items));
-      }
+      localStorage.setItem("cart", JSON.stringify(items));
     }, 500);
     return () => clearTimeout(timeoutId);
-  }, [items, isLoading]);
+  }, [items]);
 
   useEffect(() => {
     const savedCart = localStorage.getItem("cart");
     if (savedCart) {
       setItems(JSON.parse(savedCart));
     }
-    setIsLoading(false);
   }, []);
 
   const addItem = useCallback(async (newItem: CartItem) => {
@@ -117,15 +113,8 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     removeItem,
     updateQuantity,
     clearCart,
-    isLoading,
     ...cartTotals,
   };
-
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center">Loading cart...</div>
-    );
-  }
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 };
