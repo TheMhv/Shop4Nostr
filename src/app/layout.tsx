@@ -8,6 +8,7 @@ import { getShopMetadata } from "@/lib/nostr/market";
 import { CurrencyProvider } from "@/components/CurrencyProvider";
 import { NostrProvider } from "@/components/NostrProvider";
 import ProfileBadge from "@/components/cornerMenu/ProfileBadge";
+import SettingsBadge from "@/components/cornerMenu/SettingsBadge";
 
 const config: Settings = loadConfig();
 
@@ -47,13 +48,17 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <div className="fixed top-0 right-0 p-10 z-20">
-          <NostrProvider relays={config.RELAYS}>
-            <ProfileBadge></ProfileBadge>
-          </NostrProvider>
-        </div>
-
         <CurrencyProvider>
+          <div className="fixed top-0 right-0 p-10 z-20">
+            <div className="flex">
+              <SettingsBadge />
+
+              <NostrProvider relays={config.RELAYS}>
+                <ProfileBadge></ProfileBadge>
+              </NostrProvider>
+            </div>
+          </div>
+
           <CartProvider>
             <main className="container max-w-[870px] mx-auto px-4 space-y-8">
               {children}

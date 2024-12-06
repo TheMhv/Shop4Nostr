@@ -4,6 +4,7 @@ import React, { useContext, useState } from "react";
 import {
   ArrowRight,
   Banknote,
+  Bitcoin,
   ImageOff,
   ShoppingCart,
   Zap,
@@ -73,6 +74,8 @@ const PriceDisplay: React.FC<PriceDisplayProps> = ({
   <span className={cn("flex items-center gap-2", className)}>
     {currency == "SATS" ? (
       <Zap className="inline text-yellow-500" aria-hidden="true" />
+    ) : currency == "BTC" ? (
+      <Bitcoin className="inline text-yellow-500" aria-hidden="true" />
     ) : (
       <Banknote className="inline text-green-700" aria-hidden="true" />
     )}
@@ -83,7 +86,7 @@ const PriceDisplay: React.FC<PriceDisplayProps> = ({
 );
 
 const ViewCartButton: React.FC = () => (
-  <span className="flex items-center gap-x-2 rounded-full bg-white/35 text-secondary text-lg py-1 md:pl-4 md:pr-2">
+  <span className="flex items-center gap-x-2 rounded-full bg-white/35 text-secondary text-sm md:text-lg py-1 px-2">
     <span>View</span>
     <ArrowRight className="size-4" aria-hidden="true" />
   </span>

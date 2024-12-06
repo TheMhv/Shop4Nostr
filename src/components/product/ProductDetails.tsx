@@ -1,12 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useCart } from "@/components/cart/CartContext";
 import { Product, ShippingMethod } from "@/types/product";
-import { Banknote, Store, Zap } from "lucide-react";
+import { Banknote, Bitcoin, Store, Zap } from "lucide-react";
 import { QuantitySelector } from "./QuantitySelector";
 import Link from "next/link";
 import Image from "next/image";
+import { Currencies } from "@/types/currency";
+import { convert } from "@/lib/currency";
+import { CurrencyContext } from "../CurrencyProvider";
 
 interface ProductDetailsProps {
   product: Product;
@@ -46,6 +49,36 @@ export function ProductDetails({ product, store }: ProductDetailsProps) {
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const { addItem } = useCart();
 
+  const [convertedPrice, setConvertedPrice] = useState<number>(product.price);
+  const [showCurrency, setCurrency] = useState<Currencies>(
+    product.currency as Currencies
+  );
+
+  const { currency } = useContext(CurrencyContext);
+
+  useEffect(() => {
+    const fetchConvertedPrice = async () => {
+      try {
+        const converted = await convert(
+          product.price,
+          product.currency as Currencies,
+          currency
+        );
+
+        if (converted) {
+          setConvertedPrice(converted);
+          setCurrency(currency);
+        }
+      } catch (error) {
+        console.error(error);
+        setConvertedPrice(product.price);
+        setCurrency(product.currency as Currencies);
+      }
+    };
+
+    fetchConvertedPrice();
+  }, [product, currency]);
+
   const handleAddToCart = async (buyNow = false) => {
     setIsAddingToCart(true);
 
@@ -53,8 +86,8 @@ export function ProductDetails({ product, store }: ProductDetailsProps) {
       id: product.id,
       title: product.title,
       author: product.author,
-      price: product.price,
-      currency: product.currency || "SATS",
+      price: convertedPrice,
+      currency: showCurrency || "SATS",
       image: product?.images?.at(0),
       quantity: quantity || 1,
       shipping: shippingMethod,
@@ -78,13 +111,15 @@ export function ProductDetails({ product, store }: ProductDetailsProps) {
           </div>
 
           <div className="flex items-center gap-2 text-3xl font-bold">
-            {product.currency == "SATS" ? (
+            {showCurrency == "SATS" ? (
               <Zap className="text-yellow-500" aria-hidden="true" />
+            ) : showCurrency == "BTC" ? (
+              <Bitcoin className="text-yellow-500" aria-hidden="true" />
             ) : (
               <Banknote className="text-green-700" aria-hidden="true" />
             )}
             <span>
-              {product.price.toLocaleString()} {product.currency}
+              {Math.ceil(convertedPrice)} {showCurrency}
             </span>
           </div>
         </div>

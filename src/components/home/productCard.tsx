@@ -3,7 +3,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Banknote, ImageOff, Zap } from "lucide-react";
+import { Banknote, Bitcoin, ImageOff, Zap } from "lucide-react";
 import { Event } from "@rust-nostr/nostr-sdk";
 import { CurrencyContext } from "../CurrencyProvider";
 import { convert } from "@/lib/currency";
@@ -97,6 +97,8 @@ const ProductCard = ({
           <div className="flex items-center gap-2 text-lg leading-[130%] font-semibold">
             {currency == "SATS" ? (
               <Zap className="text-yellow-500" aria-hidden="true" />
+            ) : currency == "BTC" ? (
+              <Bitcoin className="text-yellow-500" aria-hidden="true" />
             ) : (
               <Banknote className="text-green-700" aria-hidden="true" />
             )}

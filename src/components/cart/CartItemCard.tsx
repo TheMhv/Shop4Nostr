@@ -1,6 +1,14 @@
 import { memo } from "react";
 import Image from "next/image";
-import { Banknote, ImageOff, Minus, Plus, Trash2, Zap } from "lucide-react";
+import {
+  Banknote,
+  Bitcoin,
+  ImageOff,
+  Minus,
+  Plus,
+  Trash2,
+  Zap,
+} from "lucide-react";
 import { useCart } from "./CartContext";
 import { CartItem } from "@/types/cart";
 import Link from "next/link";
@@ -58,6 +66,8 @@ export const CartItemCard = memo(({ item }: { item: CartItem }) => {
             <div className="flex items-center gap-2">
               {item.currency == "SATS" ? (
                 <Zap className="text-yellow-500" aria-hidden="true" />
+              ) : item.currency == "BTC" ? (
+                <Bitcoin className="text-yellow-500" aria-hidden="true" />
               ) : (
                 <Banknote className="text-green-700" aria-hidden="true" />
               )}

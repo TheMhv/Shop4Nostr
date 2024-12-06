@@ -1,7 +1,7 @@
 "use Client";
 
 import Image from "next/image";
-import { Banknote, ImageOff, Zap } from "lucide-react";
+import { Banknote, Bitcoin, ImageOff, Zap } from "lucide-react";
 import { CartContextType } from "@/types/cart";
 
 interface SummaryFormProps {
@@ -56,6 +56,8 @@ export const SummaryForm = ({ cart, handlePrevStep }: SummaryFormProps) => {
                 <div className="flex items-center gap-2">
                   {item.currency == "SATS" ? (
                     <Zap className="text-yellow-500" aria-hidden="true" />
+                  ) : item.currency == "BTC" ? (
+                    <Bitcoin className="text-yellow-500" aria-hidden="true" />
                   ) : (
                     <Banknote className="text-green-700" aria-hidden="true" />
                   )}
