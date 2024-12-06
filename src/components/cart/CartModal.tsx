@@ -162,7 +162,7 @@ export const CartModal: React.FC<CartModalProps> = ({ isOpen, setIsOpen }) => {
           </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto px-6 h-[calc(100vh-180px)]">
+        <div className="flex-1 overflow-y-auto px-6 h-screen">
           {items.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full text-neutral-400">
               <ShoppingCart className="size-12 mb-4" />
@@ -195,19 +195,21 @@ export const CartModal: React.FC<CartModalProps> = ({ isOpen, setIsOpen }) => {
         </div>
 
         {items.length > 0 && (
-          <div className="border-t border-white/10 px-6 py-4 space-y-4 bg-neutral-900">
-            <div className="flex items-center justify-between text-lg font-medium">
-              <span>Total</span>
-              <PriceDisplay amount={totalPrice} />
-            </div>
+          <section className="fixed w-full bottom-0 left-0 z-10">
+            <div className="border-t border-white/10 px-6 py-4 space-y-4 bg-neutral-900">
+              <div className="flex items-center justify-between text-lg font-medium">
+                <span>Total</span>
+                <PriceDisplay amount={totalPrice} />
+              </div>
 
-            <Link href="/checkout">
-              <button className="w-full bg-white text-black py-3 mt-4 rounded-full font-medium hover:scale-105 transition-transform flex items-center justify-center gap-2">
-                Checkout
-                <ArrowRight className="size-4" />
-              </button>
-            </Link>
-          </div>
+              <Link href="/checkout">
+                <button className="w-full bg-white text-black py-3 mt-4 rounded-full font-medium hover:scale-105 transition-transform flex items-center justify-center gap-2">
+                  Checkout
+                  <ArrowRight className="size-4" />
+                </button>
+              </Link>
+            </div>
+          </section>
         )}
       </div>
     </>
